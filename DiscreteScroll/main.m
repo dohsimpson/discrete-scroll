@@ -2,13 +2,16 @@
 
 #define SIGN(x) (((x) > 0) - ((x) < 0))
 #define LINES 3
+#define HORIZONTAL_LINES 5
 
 CGEventRef cgEventCallback(CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *refcon)
 {
     if (!CGEventGetIntegerValueField(event, kCGScrollWheelEventIsContinuous)) {
         int64_t delta = CGEventGetIntegerValueField(event, kCGScrollWheelEventPointDeltaAxis1);
-
         CGEventSetIntegerValueField(event, kCGScrollWheelEventDeltaAxis1, SIGN(delta) * LINES);
+
+        int64_t delta2 = CGEventGetIntegerValueField(event, kCGScrollWheelEventPointDeltaAxis2);
+        CGEventSetIntegerValueField(event, kCGScrollWheelEventDeltaAxis2, SIGN(delta2) * HORIZONTAL_LINES);
     }
 
     return event;
